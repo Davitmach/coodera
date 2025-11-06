@@ -1,0 +1,24 @@
+.dev_icon {
+    position: relative;
+    &::before {
+        content: url('../../../../public/developer.svg');
+        position: absolute;
+        top: 76px;
+        left: -152px;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+    }
+}
+.design_icon {
+    position: relative;
+    &::before {
+        content: url('../../../../public/designer.svg');
+        position: absolute;
+        top: -65px;
+        left: 152px;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+    }
+}
