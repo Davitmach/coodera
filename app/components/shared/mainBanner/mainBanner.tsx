@@ -7,73 +7,48 @@ import './style.scss';
 gsap.registerPlugin(ScrollTrigger);
 export default function MainBanner() {
     const videoRef = useRef<HTMLVideoElement>(null);
- const mainRef = useRef<HTMLDivElement>(null);
+    const mainRef = useRef<HTMLDivElement>(null);
+    const sectionRef = useRef<HTMLDivElement>(null);
+
     useEffect(() => {
       const video = videoRef.current;
       const main = mainRef.current;
+      const section = sectionRef.current;
 
-      if (!video || !main) return;
-  
-      ScrollTrigger.create({
-        trigger: 'body',
-        start: 'top top',
-        end: 'max',
-        onEnter: () => {
-          gsap.set(video, {
-       
+      if (!video || !main || !section) return;
 
-            borderRadius: '23px',
-
-width: 'calc(100% - 50px)',
-marginLeft:'25px',
-
-
-          });
-          gsap.to(video, {
-          
-            duration: 0.3,
-            ease: 'power2.out'
-          });
-          gsap.set(main,{
-maxWidth:'calc(100% - 248px)',
-height:'90%'
-          })
-          gsap.to(main, {
-          
-            duration: 0.3,
-            ease: 'power2.out'
-          });
-    
+      // Создаем timeline с pinned scroll trigger
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: 'top top',
+          end: '+=300', // короткая длина "виртуального" скролла для быстрой анимации
+          scrub: 0.1, // очень плавный и отзывчивый скролл (меньшее значение = быстрее реакция)
+          pin: true, // фиксируем секцию
         },
-        onLeaveBack: () => {
-          gsap.set(video, {
-  
-            borderRadius: '0',
-            marginLeft:'0', 
-            width:'100%',
-            top:'0',
-            height:'100%'
-          });
-          gsap.to(video, {
-           
-            duration: 0.3,
-            ease: 'power2.out'
-          });
-          gsap.set(main,{
-            maxWidth:'1081px',
-            height:'auto'
-          })
-        }
       });
+
+      // Анимация: сначала видео и контент трансформируются
+      tl.to(video, {
+        borderRadius: '23px',
+        width: 'calc(100% - 50px)',
+        marginLeft: '25px',
+        ease: 'linear' // линейная анимация для более плавного скролла
+      })
+      .to(main, {
+        maxWidth: 'calc(100% - 248px)',
+        height: '90%',
+        ease: 'linear' // линейная анимация для более плавного скролла
+      }, '<'); // '<' означает, что анимация начинается одновременно с предыдущей
   
       return () => {
         ScrollTrigger.getAll().forEach(trigger => trigger.kill());
       };
     }, []);
   return (
-    <div  className="w-full h-screen flex justify-center items-center">
+    <section ref={sectionRef} className="relative w-full h-screen flex justify-center items-center">
       <video 
-      ref={videoRef}
+        ref={videoRef}
         src="/mainBanner.mp4" 
         autoPlay 
         muted 
@@ -96,6 +71,6 @@ height:'90%'
           <button className="rounded-[46px] py-[11px] px-[23.5px] text-[#222222] text-[24px] border border-[#222222] outline-none cursor-pointer">позвоните мне</button>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
