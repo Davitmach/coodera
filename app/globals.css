@@ -7,8 +7,15 @@
 
 
 
+html {
+overscroll-behavior: none;
+
+}
+
 body {
   background: #F4F7FA;
   color: var(--foreground);
   font-family: var(--font-tiktok-sans), Arial, Helvetica, sans-serif;
+  overscroll-behavior: none;
+
 }
